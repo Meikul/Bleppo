@@ -34,8 +34,14 @@ extern "C" {
 
 // Constants
 #define baseStackHeight 100
-#define coneIncrement 50
+#define coneIncrement 125
 #define liftBottom 0
+#define intakeBottom 50
+#define intakeTop 4080
+#define hoverHeight 2230
+#define floorHeight 1967
+#define fullHeight 3650
+#define halfHeight 3000
 // Motors
 #define intake 1
 #define liftTR 2
@@ -56,6 +62,7 @@ extern "C" {
 #define encL2 2
 #define encR1 3
 #define encR2 4
+#define mogoInBtn 5
 
 
 void driveSet(int left, int right);
@@ -64,10 +71,13 @@ void intakeSet(int power);
 void mogoSet(int power);
 int linSpeed(int speed);
 void mset(int port, int power);
+void startMotors();
+int rectify(int val, int highbound, int lowbound);
+void liftSetInd(int left, int right);
 
-Encoder driveR;
-Encoder driveL;
-
+extern Encoder driveR;
+extern Encoder driveL;
+extern int intakeTarget;
 
 // A function prototype looks exactly like its declaration, but with a semicolon instead of
 // actual code. If a function does not match a prototype, compile errors will occur.
