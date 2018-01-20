@@ -128,7 +128,7 @@ void autoStack(){
 			liftPid();
 			intakeTarget = intakeTop;
 			intakePid();
-			if(liftPot < (topPot - 200)) stackStatus = 0;
+			if(liftPot < (topPot - 1000) || liftPot < hoverHeight) stackStatus = 0;
       lcdSetText(uart1, 2, "Stacking");
       break;
     case 5: // Scoring Mogo
