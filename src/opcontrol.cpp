@@ -83,11 +83,13 @@ void autoStack(){
 	bool btn5u = joystickGetDigital(1, 5, JOY_UP);
 	bool btn5d = joystickGetDigital(1, 5, JOY_DOWN);
   bool btn8u = joystickGetDigital(1, 8, JOY_UP);
+  bool btn8d = joystickGetDigital(1, 8, JOY_DOWN);
 	int topPot = 0;
 	static bool lastBtn5d = false;
 	static bool lastBtn5u = false;
 	int liftPot = analogRead(liftL);
   if(btn8u) stackStatus = 5;
+  if(btn8d) stackStatus = 0;
 	switch(stackStatus){
 		case 0: // Hovering
 			liftTarget = hoverHeight;
