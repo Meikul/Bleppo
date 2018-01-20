@@ -36,7 +36,7 @@
  int liftSpeeds[2] = {0,0};
  bool lastBtn8r = false;
  int stackStatus = 0;
-bool autoStackEnabled = false;
+ bool autoStackEnabled = false;
 
 void manualLift();
 void driveControl();
@@ -63,8 +63,11 @@ void operatorControl() {
 
 		if(autoStackEnabled){
 			autoStack();
+      lcdSetText(uart1, 1, "Auto Stacking");
 		}
 		else {
+      lcdSetText(uart1, 1, "Manual Mode");
+      lcdSetText(uart1, 2, "Btn8r to toggle");
 			intakeControl();
 			liftControl();
 		}
@@ -79,10 +82,12 @@ void operatorControl() {
 void autoStack(){
 	bool btn5u = joystickGetDigital(1, 5, JOY_UP);
 	bool btn5d = joystickGetDigital(1, 5, JOY_DOWN);
+  bool btn8u = joystickGetDigital(1, 8, JOY_UP);
 	int topPot = 0;
 	static bool lastBtn5d = false;
 	static bool lastBtn5u = false;
 	int liftPot = analogRead(liftL);
+  if(btn8u) stackStatus = 5;
 	switch(stackStatus){
 		case 0: // Hovering
 			liftTarget = hoverHeight;
@@ -91,25 +96,30 @@ void autoStack(){
 			intakePid();
 			if(btn5u) stackStatus = 2;
 			if(btn5d && !lastBtn5d) stackStatus = 1;
+      lcdSetText(uart1, 2, "Hovering");
 			break;
 		case 1: // Plunging
 			liftSet(-127);
 			intakeTarget = intakeBottom;
 			intakePid();
 			if(liftPot < floorHeight || btn5u) stackStatus = 0;
+      lcdSetText(uart1, 2, "Plunging");
 			break;
 		case 2: // Lifting
 			manualLift();
 			intakeTarget = intakeBottom;
 			intakePid();
 			if(!btn5u) stackStatus = 3;
+      lcdSetText(uart1, 2, "Lifting");
 			break;
 		case 3: // Pre-Stacking
+      manualLift();
 			topPot = liftPot;
 			intakeTarget = intakeTop;
 			intakePid();
 			if(btn5u) stackStatus = 2;
 			else if(btn5d) stackStatus = 4;
+      lcdSetText(uart2, 2, "Pre-stacking");
 			break;
 		case 4: // Stacking
 			liftTarget = hoverHeight;
@@ -117,6 +127,16 @@ void autoStack(){
 			intakeTarget = intakeTop;
 			intakePid();
 			if(liftPot < (topPot - 200)) stackStatus = 0;
+      lcdSetText(uart1, 2, "Stacking");
+      break;
+    case 5: // Scoring Mogo
+      liftTarget = fullHeight;
+      liftPid();
+      if(liftPot > (fullHeight - 200)) intakeTarget = intakeTop;
+      intakePid();
+      if(btn5d) stackStatus = 0;
+      lcdSetText(uart1, 2, "Scoring Mogo");
+      break;
 	}
 	lastBtn5d = btn5d;
 	lastBtn5u = btn5u;
