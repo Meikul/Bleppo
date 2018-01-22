@@ -62,10 +62,11 @@ void operatorControl() {
 		}
 
 		if(autoStackEnabled){
-			autoStack();
       lcdSetText(uart1, 1, "Auto Stacking");
+			autoStack();
 		}
 		else {
+      stackStatus = 0;
       lcdSetText(uart1, 1, "Manual Mode");
       lcdSetText(uart1, 2, "Btn8r to toggle");
 			intakeControl();
@@ -86,7 +87,6 @@ void autoStack(){
   bool btn8d = joystickGetDigital(1, 8, JOY_DOWN);
 	int topPot = 0;
 	static bool lastBtn5d = false;
-	static bool lastBtn5u = false;
 	int liftPot = analogRead(liftL);
   if(btn8u) stackStatus = 5;
   if(btn8d) stackStatus = 0;
@@ -141,7 +141,6 @@ void autoStack(){
       break;
 	}
 	lastBtn5d = btn5d;
-	lastBtn5u = btn5u;
 }
 
 void accelTo(int port, int speed){
