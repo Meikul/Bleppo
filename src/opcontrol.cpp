@@ -121,7 +121,7 @@ void autoStack(){
 			intakePid();
 			if(btn5u) stackStatus = 2;
 			else if(btn5d) stackStatus = 4;
-      lcdSetText(uart2, 2, "Pre-stacking");
+      lcdSetText(uart1, 2, "Pre-stacking");
 			break;
 		case 4: // Stacking
 			liftTarget = hoverHeight;
